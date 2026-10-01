@@ -1,0 +1,19 @@
+{
+  "name": "حيطان المعتقل",
+  "short_name": "حيطان",
+  "description": "منصة مجتمعية للتوثيق والبحث عن المعتقلين والمفقودين",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f1e9",
+  "theme_color": "#b5121b",
+  "lang": "ar",
+  "dir": "rtl",
+  "id": "/",
+  "scope": "/",
+  "orientation": "portrait",
+  "icons": [
+    {"src":"/haytan-logo.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"/haytan-logo.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"/haytan-logo.png","sizes":"1254x1254","type":"image/png","purpose":"any"}
+  ]
+}

@@ -1,0 +1,6 @@
+import {Router} from 'express';import bcrypt from 'bcryptjs';import jwt from 'jsonwebtoken';import {z} from 'zod';import {AdminUser} from '../models/AdminUser.js';import {requireAdmin,type AuthedRequest} from '../middleware/auth.js';
+const r=Router();const schema=z.object({email:z.string().email(),password:z.string().min(6)});
+r.post('/login',async(req,res)=>{const p=schema.safeParse(req.body);if(!p.success)return res.status(400).json({error:'invalid_data'});const u=await AdminUser.findOne({email:p.data.email.toLowerCase(),active:true});if(!u||!(await bcrypt.compare(p.data.password,u.passwordHash)))return res.status(401).json({error:'invalid_credentials'});const token=jwt.sign({id:String(u._id),role:u.role},process.env.JWT_SECRET!,{expiresIn:'12h'});res.cookie('haytan_admin',token,{httpOnly:true,sameSite:'lax',secure:process.env.NODE_ENV==='production',maxAge:12*60*60*1000});res.json({ok:true,user:{name:u.name,email:u.email,role:u.role}})});
+r.post('/logout',(_req,res)=>{res.clearCookie('haytan_admin');res.json({ok:true})});
+r.get('/me',requireAdmin,async(req:AuthedRequest,res)=>{const u=await AdminUser.findById(req.admin!.id).select('name email role').lean();res.json({user:u})});
+export default r;
